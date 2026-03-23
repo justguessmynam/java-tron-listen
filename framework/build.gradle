@@ -55,7 +55,7 @@ dependencies {
     implementation (group: 'org.pf4j', name: 'pf4j', version: '3.10.0') {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-
+implementation 'org.xerial.snappy:snappy-java:1.1.10.7'
     testImplementation group: 'org.springframework', name: 'spring-test', version: "${springVersion}"
     implementation group: 'org.zeromq', name: 'jeromq', version: '0.5.3'
     api project(":chainbase")
