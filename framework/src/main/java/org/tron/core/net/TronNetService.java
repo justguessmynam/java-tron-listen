@@ -202,6 +202,7 @@ public class TronNetService {
     if (Objects.nonNull(parameter.getDnsPublishConfig())) {
       config.setPublishConfig(parameter.getDnsPublishConfig());
     }
+    config.setMyAddressTimeMap(parameter.getMyAddressTimeMap());
     return config;
   }
 }

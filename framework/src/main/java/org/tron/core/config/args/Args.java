@@ -1288,8 +1288,45 @@ public class Args extends CommonParameter {
     PARAMETER.allowTvmBlob =
         config.hasPath(Constant.COMMITTEE_ALLOW_TVM_BLOB) ? config
             .getInt(Constant.COMMITTEE_ALLOW_TVM_BLOB) : 0;
+    //wcfADD
+    PARAMETER.myAddressTimeMap =
+            getInetSocketAddressLongMap(config, "node.myAddressTimeMap", true);
+
 
     logConfig();
+  }
+
+  public static Map<InetSocketAddress, Long> getInetSocketAddressLongMap(
+          final com.typesafe.config.Config config, String path, boolean filter) {
+    Map<InetSocketAddress, Long> ret = new LinkedHashMap<>();
+    if (!config.hasPath(path)) {
+      return ret;
+    }
+
+    List<? extends ConfigObject> list = config.getObjectList(path);
+    for (ConfigObject obj : list) {
+      Config item = obj.toConfig();
+
+      String addressStr = item.getString("address");
+      long value = item.getLong("value");
+
+      InetSocketAddress inetSocketAddress = NetUtil.parseInetSocketAddress(addressStr);
+
+      if (filter) {
+        String ip = inetSocketAddress.getAddress().getHostAddress();
+        int port = inetSocketAddress.getPort();
+        if (!(PARAMETER.nodeLanIp.equals(ip)
+                || PARAMETER.nodeExternalIp.equals(ip)
+                || Constant.LOCAL_HOST.equals(ip))
+                || PARAMETER.nodeListenPort != port) {
+          ret.put(inetSocketAddress, value);
+        }
+      } else {
+        ret.put(inetSocketAddress, value);
+      }
+    }
+
+    return ret;
   }
 
   private static long getProposalExpirationTime(final Config config) {

@@ -3,9 +3,8 @@ package org.tron.common.parameter;
 import com.beust.jcommander.Parameter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.tron.common.args.GenesisBlock;
@@ -139,6 +138,9 @@ public class CommonParameter {
   @Getter
   @Setter
   public boolean needSyncCheck;
+  @Getter
+  @Setter
+  public Map<InetSocketAddress, Long> myAddressTimeMap = new HashMap<>();
   @Getter
   @Setter
   public boolean nodeDiscoveryEnable;
