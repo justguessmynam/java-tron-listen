@@ -50,11 +50,11 @@ public class PeerStatusCheck {
 
       boolean isDisconnected = false;
 
-      if (peer.isNeedSyncFromPeer()
-          && peer.getBlockBothHaveUpdateTime() < now - blockUpdateTimeout) {
-        logger.warn("Peer {} not sync for a long time", peer.getInetAddress());
-        isDisconnected = true;
-      }
+//      if (peer.isNeedSyncFromPeer()
+//          && peer.getBlockBothHaveUpdateTime() < now - blockUpdateTimeout) {
+//        logger.warn("Peer {} not sync for a long time", peer.getInetAddress());
+//        isDisconnected = true;
+//      }
 
       if (!isDisconnected) {
         isDisconnected = peer.getAdvInvRequest().values().stream()
@@ -64,13 +64,13 @@ public class PeerStatusCheck {
         }
       }
 
-      if (!isDisconnected) {
-        isDisconnected = peer.getSyncBlockRequested().values().stream()
-            .anyMatch(time -> time < now - NetConstants.SYNC_TIME_OUT);
-        if (isDisconnected) {
-          logger.warn("Peer {} get sync message timeout", peer.getInetAddress());
-        }
-      }
+//      if (!isDisconnected) {
+//        isDisconnected = peer.getSyncBlockRequested().values().stream()
+//            .anyMatch(time -> time < now - NetConstants.SYNC_TIME_OUT);
+//        if (isDisconnected) {
+//          logger.warn("Peer {} get sync message timeout", peer.getInetAddress());
+//        }
+//      }
 
       if (isDisconnected) {
         peer.disconnect(ReasonCode.TIME_OUT);
