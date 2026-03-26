@@ -37,7 +37,7 @@ public class InventoryMsgHandler implements TronMsgHandler {
         java.util.Map<String, Object> logEntry = new java.util.HashMap<>();
         logEntry.put("t", System.currentTimeMillis()); // 时间戳
         logEntry.put("ip", peer.getInetAddress().getHostAddress()); // 纯 IP 地址
-        logEntry.put("lat", peer.getChannel().getLatestLatency()); // 网络延迟 (ms)
+        logEntry.put("lat", peer.getChannel().getLatency()); // 网络延迟 (ms)
         logEntry.put("sz", inventoryMessage.getHashList().size()); // Hash 数量
 
         // 记录原始 Hash 列表，方便后续按 Hash 分类统计
