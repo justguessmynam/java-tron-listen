@@ -330,7 +330,8 @@ public class AdvService {
 
   class InvSender {
 
-    private HashMap<PeerConnection, HashMap<InventoryType, LinkedList<Sha256Hash>>> send = new HashMap<>();
+    private HashMap<PeerConnection, // 强制换行
+        HashMap<InventoryType, LinkedList<Sha256Hash>>> send = new HashMap<>();
 
     public void clear() {
       this.send.clear();
