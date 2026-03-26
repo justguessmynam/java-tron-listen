@@ -88,7 +88,7 @@ public class AdvService {
 
     spreadExecutor.scheduleWithFixedDelay(() -> {
       try {
-        consumerInvToSpread();
+        // consumerInvToSpread();
       } catch (Exception exception) {
         logger.error("Spread thread error", exception);
       }
@@ -159,8 +159,8 @@ public class AdvService {
   public int fastBroadcastTransaction(TransactionMessage msg) {
 
     List<PeerConnection> peers = tronNetDelegate.getActivePeer().stream()
-            .filter(peer -> !peer.isNeedSyncFromPeer() && !peer.isNeedSyncFromUs())
-            .collect(Collectors.toList());
+        .filter(peer -> !peer.isNeedSyncFromPeer() && !peer.isNeedSyncFromUs())
+        .collect(Collectors.toList());
 
     if (peers.size() == 0) {
       logger.warn("Broadcast transaction {} failed, no connection", msg.getMessageId());
@@ -176,9 +176,9 @@ public class AdvService {
     InventoryMessage inventoryMessage = new InventoryMessage(list, InventoryType.TRX);
 
     int peersCount = 0;
-    for (PeerConnection peer: peers) {
+    for (PeerConnection peer : peers) {
       if (peer.getAdvInvReceive().getIfPresent(item) == null
-              && peer.getAdvInvSpread().getIfPresent(item) == null) {
+          && peer.getAdvInvSpread().getIfPresent(item) == null) {
         peersCount++;
         peer.getAdvInvSpread().put(item, Time.getCurrentMillis());
         peer.sendMessage(inventoryMessage);
@@ -230,25 +230,26 @@ public class AdvService {
   }
 
   /*
-  public void fastForward(BlockMessage msg) {
-    Item item = new Item(msg.getBlockId(), InventoryType.BLOCK);
-    List<PeerConnection> peers = tronNetDelegate.getActivePeer().stream()
-        .filter(peer -> !peer.isNeedSyncFromPeer() && !peer.isNeedSyncFromUs())
-        .filter(peer -> peer.getAdvInvReceive().getIfPresent(item) == null
-            && peer.getAdvInvSpread().getIfPresent(item) == null)
-        .collect(Collectors.toList());
-
-    if (!fastForward) {
-      peers = peers.stream().filter(peer -> peer.isFastForwardPeer()).collect(Collectors.toList());
-    }
-
-    peers.forEach(peer -> {
-      peer.fastSend(msg);
-      peer.getAdvInvSpread().put(item, System.currentTimeMillis());
-      peer.setFastForwardBlock(msg.getBlockId());
-    });
-  }
-  */
+   * public void fastForward(BlockMessage msg) {
+   * Item item = new Item(msg.getBlockId(), InventoryType.BLOCK);
+   * List<PeerConnection> peers = tronNetDelegate.getActivePeer().stream()
+   * .filter(peer -> !peer.isNeedSyncFromPeer() && !peer.isNeedSyncFromUs())
+   * .filter(peer -> peer.getAdvInvReceive().getIfPresent(item) == null
+   * && peer.getAdvInvSpread().getIfPresent(item) == null)
+   * .collect(Collectors.toList());
+   * 
+   * if (!fastForward) {
+   * peers = peers.stream().filter(peer ->
+   * peer.isFastForwardPeer()).collect(Collectors.toList());
+   * }
+   * 
+   * peers.forEach(peer -> {
+   * peer.fastSend(msg);
+   * peer.getAdvInvSpread().put(item, System.currentTimeMillis());
+   * peer.setFastForwardBlock(msg.getBlockId());
+   * });
+   * }
+   */
 
   public void onDisconnect(PeerConnection peer) {
     if (!peer.getAdvInvRequest().isEmpty()) {
@@ -280,7 +281,7 @@ public class AdvService {
       invToFetch.forEach((item, time) -> {
         if (time < now - TIMEOUT) {
           logger.info("This obj is too late to fetch, type: {} hash: {}", item.getType(),
-                  item.getHash());
+              item.getHash());
           invToFetch.remove(item);
           invToFetchCache.invalidate(item);
           return;
@@ -317,7 +318,7 @@ public class AdvService {
       if (peer.getAdvInvReceive().getIfPresent(item) == null
           && peer.getAdvInvSpread().getIfPresent(item) == null
           && !(item.getType().equals(InventoryType.BLOCK)
-          && System.currentTimeMillis() - time > BLOCK_PRODUCED_INTERVAL)) {
+              && System.currentTimeMillis() - time > BLOCK_PRODUCED_INTERVAL)) {
         peer.getAdvInvSpread().put(item, Time.getCurrentMillis());
         invSender.add(item, peer);
       }
@@ -329,8 +330,7 @@ public class AdvService {
 
   class InvSender {
 
-    private HashMap<PeerConnection, HashMap<InventoryType, LinkedList<Sha256Hash>>> send
-        = new HashMap<>();
+    private HashMap<PeerConnection, HashMap<InventoryType, LinkedList<Sha256Hash>>> send = new HashMap<>();
 
     public void clear() {
       this.send.clear();
