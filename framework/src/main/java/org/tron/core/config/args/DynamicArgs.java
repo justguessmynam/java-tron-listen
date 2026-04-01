@@ -123,7 +123,7 @@ public class DynamicArgs {
 
     logger.info("random myAddressTimeMap : {}", newAddressTimeMap);
 
-    RandomConnConnectService randomConnectService= ChannelManager.getRandomConnectService();
+    RandomConnectService randomConnectService= ChannelManager.getRandomConnectService();
     if (randomConnectService != null) {
       randomConnectService.updateAddressTimeMap(newAddressTimeMap);
     }
