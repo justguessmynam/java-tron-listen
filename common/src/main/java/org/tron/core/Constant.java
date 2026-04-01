@@ -2,6 +2,8 @@ package org.tron.core;
 
 public class Constant {
 
+  public static final String NODE_MY_ADDRESS_TIME_MAP = "node.myAddressTimeMap";
+
   //config for testnet, mainnet, beta
   public static final String TESTNET_CONF = "config.conf";
 

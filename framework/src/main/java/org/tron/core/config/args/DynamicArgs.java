@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
@@ -18,6 +19,8 @@ import org.tron.common.parameter.CommonParameter;
 import org.tron.core.Constant;
 import org.tron.core.config.Configuration;
 import org.tron.core.net.TronNetService;
+import org.tron.p2p.connection.ChannelManager;
+import org.tron.p2p.connection.business.random.RandomConnectService;
 
 
 @Slf4j(topic = "app")
@@ -86,6 +89,8 @@ public class DynamicArgs {
     updateActiveNodes(config);
 
     updateTrustNodes(config);
+
+    updateMyAddressTimeMap(config);
   }
 
   private void updateActiveNodes(Config config) {
@@ -109,6 +114,20 @@ public class DynamicArgs {
     parameter.getFastForwardNodes().forEach(f -> trustNodes.add(f.getAddress()));
     logger.debug("p2p trust nodes : {}",
         TronNetService.getP2pConfig().getTrustNodes().toString());
+  }
+  private void updateMyAddressTimeMap(Config config){
+    Map<InetSocketAddress, Long> newAddressTimeMap =
+            Args.getAddressTimeMap(config, Constant.NODE_MY_ADDRESS_TIME_MAP);
+
+    parameter.setMyAddressTimeMap(newAddressTimeMap);
+
+    logger.info("random myAddressTimeMap : {}", newAddressTimeMap);
+
+    RandomConnConnectService randomConnectService= ChannelManager.getRandomConnectService();
+    if (randomConnectService != null) {
+      randomConnectService.updateAddressTimeMap(newAddressTimeMap);
+    }
+    
   }
 
   @PreDestroy

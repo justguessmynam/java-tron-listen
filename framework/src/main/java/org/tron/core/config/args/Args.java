@@ -1821,6 +1821,41 @@ public class Args extends CommonParameter {
     logger.info("\n");
   }
 
+  public static Map<InetSocketAddress, Long> getAddressTimeMap(Config config, String path) {
+    Map<InetSocketAddress, Long> result = new HashMap<>();
+
+    if (config == null || !config.hasPath(path)) {
+      return result;
+    }
+
+    List<? extends Config> list = config.getConfigList(path);
+    for (Config item : list) {
+      String addressStr = item.getString("address");
+      long value = item.getLong("value");
+
+      InetSocketAddress address = parseInetSocketAddress(addressStr);
+      result.put(address, value);
+    }
+
+    return result;
+  }
+
+  private static InetSocketAddress parseInetSocketAddress(String addressStr) {
+    if (addressStr == null || addressStr.trim().isEmpty()) {
+      throw new IllegalArgumentException("address is blank");
+    }
+
+    String[] parts = addressStr.trim().split(":");
+    if (parts.length != 2) {
+      throw new IllegalArgumentException("invalid address format: " + addressStr);
+    }
+
+    String host = parts[0].trim();
+    int port = Integer.parseInt(parts[1].trim());
+
+    return new InetSocketAddress(host, port);
+  }
+
   /**
    * get output directory.
    */
