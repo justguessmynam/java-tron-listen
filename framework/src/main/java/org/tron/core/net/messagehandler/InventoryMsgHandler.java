@@ -1,6 +1,8 @@
 package org.tron.core.net.messagehandler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tron.common.utils.Sha256Hash;
@@ -21,7 +23,7 @@ import java.io.UnsupportedEncodingException;
 @Slf4j(topic = "net")
 @Component
 public class InventoryMsgHandler implements TronMsgHandler {
-
+  private static final Logger stdoutLog = LoggerFactory.getLogger("STDOUT_LOGGER");
   @Autowired
   private TronNetDelegate tronNetDelegate;
 
@@ -35,17 +37,10 @@ public class InventoryMsgHandler implements TronMsgHandler {
   public void processMessage(PeerConnection peer, TronMessage msg) {
     InventoryMessage inventoryMessage = (InventoryMessage) msg;
     InventoryType type = inventoryMessage.getInventoryType();
-      try {
-          PrintStream ps = new PrintStream(new FileOutputStream("sout.log", true), true, "UTF-8");
-          System.setOut(ps);
-      } catch (UnsupportedEncodingException e) {
-          throw new RuntimeException(e);
-      } catch (FileNotFoundException e) {
-          throw new RuntimeException(e);
-      }
-    System.out.println("INV "+peer.getInetAddress().getHostAddress()+" "+inventoryMessage.getHashList().size());
-    for (Sha256Hash id : inventoryMessage.getHashList()){
-      System.out.println(peer.getInetAddress().getHostAddress()+" "+id);
+    String ip = peer.getInetAddress().getHostAddress();
+    stdoutLog.info("INV {} {}", ip, inventoryMessage.getHashList().size());
+    for (Sha256Hash id : inventoryMessage.getHashList()) {
+      stdoutLog.info("{} {}", ip, id);
     }
     if (!check(peer, inventoryMessage)) {
       return;

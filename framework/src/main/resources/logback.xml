@@ -72,6 +72,24 @@
 
   <appender name="METRICS" class="org.tron.common.prometheus.InstrumentedAppender" />
 
+  <appender name="STDOUT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>./logs/stdout/stdout.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>./logs/stdout/stdout-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+      <maxFileSize>500MB</maxFileSize>
+      <maxHistory>40</maxHistory>
+      <totalSizeCap>20GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder charset="UTF-8">
+      <pattern>%d{HH:mm:ss.SSS} %msg%n</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <logger level="INFO" name="STDOUT_LOGGER" additivity="false">
+    <appender-ref ref="STDOUT_FILE"/>
+  </logger>
+
   <root level="INFO">
     <appender-ref ref="METRICS" />
   </root>
