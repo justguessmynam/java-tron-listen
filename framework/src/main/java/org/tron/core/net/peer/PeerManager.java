@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.tron.common.es.ExecutorServiceManager;
 import org.tron.common.prometheus.MetricKeys;
@@ -20,6 +22,8 @@ import org.tron.protos.Protocol.ReasonCode;
 
 @Slf4j(topic = "net")
 public class PeerManager {
+
+  private static final Logger stdoutLog = LoggerFactory.getLogger("STDOUT_LOGGER");
 
   private static List<PeerConnection> peers = Collections.synchronizedList(new ArrayList<>());
   @Getter
@@ -159,7 +163,7 @@ public class PeerManager {
     }
     metric(valid, MetricLabels.Gauge.PEERS_VALID);
     logger.info(sb.toString());
-    System.out.println(ipSb);
+    stdoutLog.info(ipSb.toString());
   }
 
   private static void metric(double amt, String peerType) {
