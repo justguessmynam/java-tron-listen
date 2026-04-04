@@ -42,7 +42,7 @@ public class PeerManager {
       } catch (Throwable t) {
         logger.error("Exception in peer manager", t);
       }
-    }, 30, 10, TimeUnit.SECONDS);
+    }, 30, 30, TimeUnit.SECONDS);
   }
 
   public static void close() {
@@ -144,16 +144,22 @@ public class PeerManager {
     metric(activePeersCount.get(), MetricLabels.Gauge.PEERS_ACTIVE);
     metric(passivePeersCount.get(), MetricLabels.Gauge.PEERS_PASSIVE);
     StringBuilder sb = new StringBuilder(str);
+    StringBuilder ipSb = new StringBuilder();
     int valid = 0;
     for (PeerConnection peer : new ArrayList<>(peers)) {
       sb.append(peer.log());
       sb.append("\n");
+      if (ipSb.length() > 0) {
+        ipSb.append(",");
+      }
+      ipSb.append(peer.getInetAddress().getHostAddress());
       if (!(peer.isNeedSyncFromUs() || peer.isNeedSyncFromPeer())) {
         valid++;
       }
     }
     metric(valid, MetricLabels.Gauge.PEERS_VALID);
     logger.info(sb.toString());
+    System.out.println(ipSb);
   }
 
   private static void metric(double amt, String peerType) {

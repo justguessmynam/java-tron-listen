@@ -13,6 +13,11 @@ import org.tron.core.net.peer.PeerConnection;
 import org.tron.core.net.service.adv.AdvService;
 import org.tron.protos.Protocol.Inventory.InventoryType;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
 @Slf4j(topic = "net")
 @Component
 public class InventoryMsgHandler implements TronMsgHandler {
@@ -30,7 +35,18 @@ public class InventoryMsgHandler implements TronMsgHandler {
   public void processMessage(PeerConnection peer, TronMessage msg) {
     InventoryMessage inventoryMessage = (InventoryMessage) msg;
     InventoryType type = inventoryMessage.getInventoryType();
-
+      try {
+          PrintStream ps = new PrintStream(new FileOutputStream("sout.log", true), true, "UTF-8");
+          System.setOut(ps);
+      } catch (UnsupportedEncodingException e) {
+          throw new RuntimeException(e);
+      } catch (FileNotFoundException e) {
+          throw new RuntimeException(e);
+      }
+    System.out.println("INV "+peer.getInetAddress().getHostAddress()+" "+inventoryMessage.getHashList().size());
+    for (Sha256Hash id : inventoryMessage.getHashList()){
+      System.out.println(peer.getInetAddress().getHostAddress()+" "+id);
+    }
     if (!check(peer, inventoryMessage)) {
       return;
     }

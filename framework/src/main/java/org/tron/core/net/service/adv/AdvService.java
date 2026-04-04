@@ -88,7 +88,7 @@ public class AdvService {
 
     spreadExecutor.scheduleWithFixedDelay(() -> {
       try {
-        consumerInvToSpread();
+        //consumerInvToSpread();
       } catch (Exception exception) {
         logger.error("Spread thread error", exception);
       }
