@@ -97,6 +97,6 @@
   <logger level="INFO" name="tool" additivity="false">
     <appender-ref ref="CONSOLE"/>
   </logger>
-
+  <logger level="INFO" name="org.tron.p2p" />
 </configuration>
 
