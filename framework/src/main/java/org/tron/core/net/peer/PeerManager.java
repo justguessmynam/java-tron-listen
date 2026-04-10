@@ -136,7 +136,7 @@ public class PeerManager {
         } else {
           passivePeersCount.decrementAndGet();
         }
-        System.out.println("PeerManager check disconnect");
+        //System.out.println("PeerManager check disconnect");
         peer.onDisconnect();
       }
     }
