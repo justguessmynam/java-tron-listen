@@ -113,7 +113,7 @@ public class P2pEventHandlerImpl extends P2pEventHandler {
 
     PeerConnection peerConnection = PeerManager.remove(channel);
     if (peerConnection != null) {
-      System.out.println("P2pEventHandlerImpl onDisconnect"+peerConnection.getNodeStatistics().getDisconnectReason());
+      //System.out.println("P2pEventHandlerImpl onDisconnect"+peerConnection.getNodeStatistics().getDisconnectReason());
       peerConnection.onDisconnect();
     }
     effectiveCheckService.onDisconnect(channel.getInetSocketAddress());
