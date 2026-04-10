@@ -163,7 +163,7 @@ public class PeerManager {
     }
     metric(valid, MetricLabels.Gauge.PEERS_VALID);
     logger.info(sb.toString());
-    stdoutLog.info("ip {}", ipSb);
+    //stdoutLog.info("ip {}", ipSb);
   }
 
   private static void metric(double amt, String peerType) {

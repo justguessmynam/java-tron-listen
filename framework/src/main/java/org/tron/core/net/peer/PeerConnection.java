@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -56,6 +58,8 @@ import org.tron.protos.Protocol;
 @Component
 @Scope("prototype")
 public class PeerConnection {
+
+  private static final Logger stdoutLog = LoggerFactory.getLogger("STDOUT_LOGGER");
 
   private static List<InetSocketAddress> relayNodes = Args.getInstance().getFastForwardNodes();
 
@@ -166,6 +170,7 @@ public class PeerConnection {
 
   public void setChannel(Channel channel) {
     this.channel = channel;
+    stdoutLog.info("CONNECTMY {} at {}", channel.getInetAddress(),System.currentTimeMillis());
     if (relayNodes.stream().anyMatch(n -> n.getAddress().equals(channel.getInetAddress()))) {
       this.isRelayPeer = true;
     }
@@ -217,6 +222,11 @@ public class PeerConnection {
   }
 
   public void onDisconnect() {
+    stdoutLog.info(
+            "DISCONNECTMY_REMOTE_onDis " + channel.getInetSocketAddress()
+                    + " duration=" + (System.currentTimeMillis() - channel.getStartTime())
+                    + " ms reason=" + nodeStatistics.getRemoteDisconnectReason()
+    );
     syncService.onDisconnect(this);
     advService.onDisconnect(this);
     advInvReceive.invalidateAll();
@@ -267,6 +277,11 @@ public class PeerConnection {
   }
 
   public void disconnect(Protocol.ReasonCode code) {
+    stdoutLog.info(
+            "DISCONNECTMY_LOCAL " + channel.getInetSocketAddress()
+                    + " duration=" + (System.currentTimeMillis()- channel.getStartTime())
+                    + " ms reason=" + code
+    );
     sendMessage(new DisconnectMessage(code));
     processDisconnect(code);
     nodeStatistics.nodeDisconnectedLocal(code);
