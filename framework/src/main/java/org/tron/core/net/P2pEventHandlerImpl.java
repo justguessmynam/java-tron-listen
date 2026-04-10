@@ -179,9 +179,9 @@ public class P2pEventHandlerImpl extends P2pEventHandler {
           break;
         case P2P_DISCONNECT:
           if (peer.getP2pRateLimiter().tryAcquire(type.asByte())) {
-
             peer.getNodeStatistics()
                 .nodeDisconnectedRemote(((DisconnectMessage)msg).getReason());
+            System.out.println(peer.getAddress()+" "+((DisconnectMessage)msg).getReason());
             peer.getChannel().close();
           }
           break;
