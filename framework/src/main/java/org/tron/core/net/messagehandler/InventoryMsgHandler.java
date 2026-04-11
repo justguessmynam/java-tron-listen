@@ -38,7 +38,7 @@ public class InventoryMsgHandler implements TronMsgHandler {
     InventoryMessage inventoryMessage = (InventoryMessage) msg;
     InventoryType type = inventoryMessage.getInventoryType();
     String ip = peer.getInetAddress().getHostAddress();
-    stdoutLog.info("INV {} {}", ip, inventoryMessage.getHashList().size());
+    //stdoutLog.info("INV {} {}", ip, inventoryMessage.getHashList().size());
     for (Sha256Hash id : inventoryMessage.getHashList()) {
       stdoutLog.info("{} {}", ip, id);
     }
