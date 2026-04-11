@@ -163,9 +163,12 @@ public class PeerConnection {
   private volatile boolean needSyncFromUs = true;
   @Getter
   private P2pRateLimiter p2pRateLimiter = new P2pRateLimiter();
-
+  private long connectTime;
+ 
   public void setChannel(Channel channel) {
     this.channel = channel;
+    this.connectTime = System.currentTimeMillis();
+    logger.info("CONNECTMY {} at {}", channel.getInetAddress(), connectTime);
     if (relayNodes.stream().anyMatch(n -> n.getAddress().equals(channel.getInetAddress()))) {
       this.isRelayPeer = true;
     }
@@ -217,6 +220,10 @@ public class PeerConnection {
   }
 
   public void onDisconnect() {
+    long now = System.currentTimeMillis();
+    long duration = now - connectTime;
+    logger.info("DISCONNECTMY_REMOTE_onDis {} duration={} ms,reson={}",
+        channel.getInetSocketAddress(), duration,nodeStatistics.getRemoteDisconnectReason());
     syncService.onDisconnect(this);
     advService.onDisconnect(this);
     advInvReceive.invalidateAll();
@@ -267,6 +274,10 @@ public class PeerConnection {
   }
 
   public void disconnect(Protocol.ReasonCode code) {
+    long now = System.currentTimeMillis();
+    long duration = now - connectTime;
+    logger.info("DISCONNECTMY_LOCAL {} duration={} ms reason={}",
+        channel.getInetSocketAddress(), duration, code);
     sendMessage(new DisconnectMessage(code));
     processDisconnect(code);
     nodeStatistics.nodeDisconnectedLocal(code);
