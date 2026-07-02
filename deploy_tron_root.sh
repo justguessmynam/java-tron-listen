@@ -23,7 +23,7 @@ fi
 # [-y] Yes (自动确认所有提示)
 echo "正在更新系统源并安装依赖 (JDK8, Python3-venv, git, aria2)..."
 apt update
-apt install openjdk-8-jdk git python3.12-venv aria2 -y
+apt install openjdk-8-jdk git python3-venv aria2 -y
 echo "系统依赖安装完成。"
 echo "-----------------------------------------"
 
