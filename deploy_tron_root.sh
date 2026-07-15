@@ -79,7 +79,7 @@ cd /root/java-tron-listen
 # [-s 16 -x 16] 16个连接，单个服务器最大16线程
 # [-c] Continue (断点续传)
 # [-o] Output (指定输出文件名)
-nohup aria2c -s 16 -x 16 -c -o snapshot.tgz "http://34.143.247.77/backup20260608/LiteFullNode_output-directory.tgz" > download.log 2>&1 &
+nohup aria2c -s 16 -x 16 -c -o snapshot.tgz "http://34.86.86.229/backup20260715/LiteFullNode_output-directory.tgz" > download.log 2>&1 &
 
 echo "========================================="
 echo "🎉 一键部署脚本执行完毕！"
