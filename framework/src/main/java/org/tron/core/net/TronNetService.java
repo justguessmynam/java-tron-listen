@@ -28,6 +28,7 @@ import org.tron.core.net.service.fetchblock.FetchBlockService;
 import org.tron.core.net.service.nodepersist.NodePersistService;
 import org.tron.core.net.service.relay.RelayService;
 import org.tron.core.net.service.statistics.TronStatsManager;
+import org.tron.core.net.service.statistics.RttCollectService;
 import org.tron.core.net.service.sync.SyncService;
 import org.tron.p2p.P2pConfig;
 import org.tron.p2p.P2pService;
@@ -73,6 +74,9 @@ public class TronNetService {
   private TronStatsManager tronStatsManager;
 
   @Autowired
+  private RttCollectService rttCollectService;
+  
+  @Autowired
   private RelayService relayService;
 
   @Autowired
@@ -98,6 +102,7 @@ public class TronNetService {
       fetchBlockService.init();
       nodePersistService.init();
       tronStatsManager.init();
+      rttCollectService.init();
       PeerManager.init();
       relayService.init();
       effectiveCheckService.init();
@@ -113,6 +118,7 @@ public class TronNetService {
     }
     PeerManager.close();
     tronStatsManager.close();
+    rttCollectService.close();
     nodePersistService.close();
     advService.close();
     syncService.close();
